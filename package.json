@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tpriime/ev_server#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "ws": "^7.1.2"
   }
 }
