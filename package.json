@@ -4,7 +4,9 @@
   "description": "Electronic Voting Server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "client-app": "java -jar C:/Users/Prime/IdeaProjects/EV/out/artifacts/EV_jar/EV.jar"
   },
   "repository": {
     "type": "git",
