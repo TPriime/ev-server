@@ -34,3 +34,9 @@ module.exports.election_data = [
       }
     }
   ]
+
+
+
+  module.exports.user_data = {
+    name: 'someone'
+  }

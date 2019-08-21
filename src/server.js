@@ -5,7 +5,7 @@ const server = require('http').createServer(ex_server);
 module.exports.server = server;
 
 const response = require("./resources/responses.js")
-const device_handler = require('./device-handler.js');
+const device_handler = require('./device-handler.js').default.default;
 
 const PORT = process.env.PORT || 8080;
 const SILENT = true;
@@ -27,7 +27,5 @@ ex_server
 device_handler.start_server();
 
 server.listen(PORT, ()=>console.log(`server listening on port ${PORT}`));
-
-
 
 
