@@ -1,41 +1,37 @@
 import { Router } from 'express';
 import Admin from '../models/adminModel';
 import { hashPassword } from '../middleware/passwordMiddleware';
-import { doesEmailExist } from '../middleware/validators/emailValidator';
-import { sendVerificationMail } from '../middleware/verificationMail';
-import { setToken, verifyToken } from '../middleware/accessToken';
+import { setToken, validateToken } from '../middleware/accessToken';
 
 export default ({ config, db}) => {
     let api = Router();
-    
-    // 'coltra_api/v1/admin/signup' Endpoint to create a new admin
-    api.post('/signup', async (req, res) => {
+
+    // 'evoting_api/v1/admins/register' Endpoint to create a new admin
+    api.post('/register', async (req, res) => {
         const encryptedPassword = hashPassword(req.body.adminPassword);
         const data = {
             adminName: req.body.adminName,
             adminEmail: req.body.adminEmail,
             adminPassword: encryptedPassword,
         }
-        let existingAdminEmails = await Admin.find({email: data.adminEmail});
-        const emailStatus = doesEmailExist(data.adminEmail, existingAdminEmails);
 
-        if (emailStatus) return res.status(400).json({message: 'Email already in use'});
+        let existingAdminEmails = await Admin.findOne({adminEmail: data.adminEmail});
+        if (existingAdminEmails) return res.status(400).json({message: 'Email already in use'});
 
         try {
             let admin = await Admin.create(data);
-            if(admin){
-                sendVerificationMail(admin.adminEmail);
-                res.json({message: "Account created, check your mail for verification"});
-            }    
+            if (!admin) return res.status(401).json({message: "Admin Registration was not successful"});
+
+            res.json({message: 'Admin Registration done.', admin});
         } catch (error) {
             res.status(422).json({error: error});
         }
     });
 
-    // 'coltra_api/v1/admin/login' Endpoint to login a admin
+    // 'evoting_api/v1/admins/login' Endpoint to login a admin
     api.post('/login', async (req, res) => {
         try {
-            let result = await Admin.find({ adminEmail: req.body.adminEmail});
+            let result = await Admin.find({adminEmail: req.body.adminEmail});
 
             if (result.length === 0) return res.status(401).json({message: "Email/Password is Incorrect"});
 
@@ -55,15 +51,17 @@ export default ({ config, db}) => {
                     token: token
                 })
             }
-            
+
         } catch (error) {
             res.status(422).json({error: error});
         }
-        
+
     });
 
-    // 'coltra_api/v1/admin/admins' Endpoint to see all admins, admin only
-    api.get('/admins', async (req, res)=> {
+    // 'evoting_api/v1/admins/' Endpoint to see all admins, admin only
+    api.get('/', async (req, res)=> {
+        validateToken(req, res);
+
         try {
             let admins = await Admin.find();
 
@@ -74,12 +72,29 @@ export default ({ config, db}) => {
         }
     });
 
-    // 'coltra_api/v1/admin/:id/update' Endpoint to update any admin parameters
-    api.put('/:id/update', async (req, res) => {
+    // 'evoting_api/v1/admins/:id' Endpoint to see all admins, admin only
+    api.get('/:id', async (req, res)=> {
+        validateToken(req, res);
+
         const id = req.params.id;
-        const data = req.body; //hpw to ensure password us nt included here
         try {
-            let admin = await Admin.findByIdAndUpdate(id, data);
+            let admin = await Admin.findById(id);
+
+            if (!admin) return res.status(401).json({message: "No admin found"});
+            res.json(admin);
+        } catch (error) {
+            res.status(422).json({error: error});
+        }
+    });
+
+    // 'evoting_api/v1/admins/update/:id' Endpoint to update any admin parameters
+    api.put('/update/:id', async (req, res) => {
+        validateToken(req, res);
+
+        const id = req.params.id;
+        const {adminName} = req.body; //TODO: how to ensure password is not included here
+        try {
+            let admin = await Admin.findByIdAndUpdate(id, {adminName});
             if (!admin) return res.status(401).json({message: "No admin found"});
             res.json({message: 'Update successful'});
         } catch (error){
@@ -87,13 +102,15 @@ export default ({ config, db}) => {
         }
     });
 
-    // 'coltra_api/v1/admin/:id/delete' Endpoint to delete any admin
-    api.delete('/:id/delete', async (req, res) => {
+    // 'evoting_api/v1/admins/delete/:id' Endpoint to delete any admin
+    api.delete('/delete/:id', async (req, res) => {
+        validateToken(req, res);
+
         const id = req.params.id;
         try {
             let admin = await Admin.findByIdAndDelete(id);
             if (!admin) return res.status(401).json({message: "No admin found"});
-            res.json({message: 'admin account deleted successfully'});
+            res.json({message: 'Admin account deleted successfully'});
 
         } catch (error) {
             res.status(422).json({error: error});

@@ -16,8 +16,8 @@ initializeDb(db => {
 
     // api routes v1
     router.use('/collection', collection({ config, db }));  // Routes for Creating, Reading, Updating and Deleting a Collection
-    router.use('/user', user({ config, db}));
-    router.use('/admin', admin({ config, db}));
+    router.use('/users', user({ config, db}));
+    router.use('/admins', admin({ config, db}));
     router.use('/bankAccount', bankAccount({ config, db}));
 
 });

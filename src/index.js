@@ -7,12 +7,12 @@ import config from './config';
 import routes from './routes';
 
 let app = express();
-let server = http.createServer(app);  
+let server = http.createServer(app);
 
 // defaults
-app.use(express.json({
+/* app.use(express.json({
     limit: config.bodyLimit
-}));
+})); */
 app.use(express.urlencoded({ extended: false }));
 app.use(fileUpload({
     createParentPath: true
@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
   });
 
 // api routes v1
-app.use('/coltra_api/v1', routes);
+app.use('/evoting_api/v1', routes);
 
 server.listen(config.port);
 console.log(`server running on port ${server.address().port}`);
