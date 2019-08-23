@@ -38,5 +38,13 @@ module.exports.election_data = [
 
 
   module.exports.user_data = {
-    name: 'someone'
-  }
+    "id": "14224",
+   "name": "Ben",
+   "surname": "Okongwu",
+   "othername": "Jide",
+   "gender": "Male",
+   "state": "Anambra",
+   "town": "Awka",
+   "lga": "Awka South",
+    "fingerprint": ""
+ }

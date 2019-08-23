@@ -1,4 +1,4 @@
-//require("crypto")
+
 
 function encrypt(in_string){
     let out_string = in_string;

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
+    "anotherday": "nodemon -w src --exec \"babel-node -src \" --presets env",
     "client-app": "java -jar C:/Users/Prime/IdeaProjects/EV/out/artifacts/EV_jar/EV.jar"
   },
   "repository": {
