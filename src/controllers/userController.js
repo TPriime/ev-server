@@ -98,7 +98,7 @@ export default ({ config, db}) => {
     api.put('/update/:id', async (req, res) => {
         validateToken(req, res);
         const id = req.params.id;
-        const {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,town,maritalStatus,occupation} = req.body; //how to ensure password us nt included here
+        const {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,town,maritalStatus,occupation} = req.body;
 
         try {
             let user = await User.findByIdAndUpdate(id, {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,town,maritalStatus,occupation});
