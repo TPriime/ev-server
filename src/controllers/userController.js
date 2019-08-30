@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import fs from 'fs';
 import path from 'path';
 import User from '../models/userModel';
 import { validateDisplayPicture } from '../middleware/validators/fileTypeValidators';
@@ -20,12 +21,13 @@ export default ({ config, db}) => {
         if (!isValid) return res.status(400).json({message: "Please upload a valid filetype"});
 
         try {
+            let existingUserID = await User.findOne({userID: req.body.userID});
+            if(existingUserID) return res.status(400).json({message: 'userID already in use'});
+
             let existingUserEmail = await User.findOne({userEmail: req.body.userEmail});
-            // console.log(existingUserEmail);
             if(existingUserEmail) return res.status(400).json({message: 'Email already in use'});
 
             let existingUserphone = await User.findOne({phoneNumber: req.body.phoneNumber});
-            // console.log(existingUserphone);
             if (existingUserphone) return res.status(400).json({message: 'Phone number already in use'});
 
             mediaFile.mv(`./tempMedia/${mediaFile.name}`); //move the file to a temp storage
@@ -35,6 +37,7 @@ export default ({ config, db}) => {
             if(result.error) return res.status(503).json({message: "Upload was not successful"});
 
             const data = {
+                userID: req.body.userID,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 otherNames: req.body.otherNames,
@@ -46,10 +49,10 @@ export default ({ config, db}) => {
                 town: req.body.town,
                 maritalStatus: req.body.maritalStatus,
                 occupation: req.body.occupation,
-                userEmail: req.body.userEmail,
+                userEmail: req.body.userEmail, //search param
                 fingerprint: req.body.fingerprint,
-                userProfilePicture: result.secure_url,
-                userProfilePictureId: result.public_id
+                userProfilePicture: /* result.secure_url */mediaPath,
+                userProfilePictureId: /* result.public_id */" "
             }
 
             let upload = await User.create(data);
@@ -59,7 +62,6 @@ export default ({ config, db}) => {
 
         } catch (error) {
             res.status(422).json(error);
-            console.log(error);
         }
     });
 
@@ -78,19 +80,68 @@ export default ({ config, db}) => {
         }
     });
 
-    // 'evoting_api/v1/users/:id' Endpoint to get a user
+    // 'evoting_api/v1/users/id' Endpoint to get a user and search user included!!!
     api.get('/:id', async (req, res)=> {
 
         validateToken(req, res);
         const id = req.params.id;
+        if (req.params.id === 'search') { // '/evoting_api/v1/users/search' Endpoint to get a User in the database
+            let q, result;
+            try {
+                if (req.query.userEmail) {
+                    q = req.query.userEmail;
+                    result = await User.find({
+                        userEmail: {
+                            $regex: new RegExp(q,'i')
+                        }},{
+                            __v: 0
+                        });
+                }else if (req.query.firstName) {
+                    q = req.query.firstName;
+                    result = await User.find({
+                        firstName: {
+                            $regex: new RegExp(q,'i')
+                        }},{
+                            __v: 0
+                        });
+                }else if (req.query.lastName) {
+                    q = req.query.lastName;
+                    result = await User.find({
+                        lastName: {
+                            $regex: new RegExp(q,'i')
+                        }},{
+                            __v: 0
+                        });
+                }else if (req.query.lastName && req.query.userEmail && req.query.firstName) {
+                    q = req.query.firstName;
+                    r = req.query.lastName;
+                    p = req.query.userEmail;
+                    result = await User.find({
+                        $or: [
+                            {firstName:{$regex: new RegExp(q,'i')}},
+                            {lastName:{$regex: new RegExp(r,'i')}},
+                            {userEmail:{$regex: new RegExp(p,'i')}}
+                        ]
+                    },{
+                        __v: 0
+                    });
+                }
+                if(result.length === 0) res.status(401).json({message: "No user hdsjhsj found"});
+                res.json(result);
+            } catch (error) {
+                res.status(417).json({ message: "Could not find any User                                                                                                                    "});
+            }
+        }else{
+            try {
+                let user = await User.findOne({userID: id},{__v: 0});
 
-        try {
-            let user = await User.findById(id);
+                if (!user) return res.status(401).json({message: "No user found"});
+                // convertImg2Binary(user.userProfilePicture);
 
-            if (!user) return res.status(401).json({message: "No user found"});
-            res.json(user);
-        } catch (error) {
-            res.status(422).json({error: error});
+                res.json(user);
+            } catch (error) {
+                res.status(422).json({error: "The error"});
+            }
         }
     });
 
@@ -121,18 +172,6 @@ export default ({ config, db}) => {
             res.json({message: 'User account deleted successfully'});
 
         } catch (error) {
-            res.status(422).json({error: error});
-        }
-    });
-
-    // 'evoting_api/v1/users/verify/:id' Endpoint to verify user account
-    api.put('/verify/:id', async (req, res) => {
-        const id = req.params.id;
-        try {
-            let user = await User.findByIdAndUpdate(id, {userVerified: true});
-            if (!user) return res.status(401).json({message: "No user found"});
-            res.json({message: 'User verified'});
-        } catch (error){
             res.status(422).json({error: error});
         }
     });

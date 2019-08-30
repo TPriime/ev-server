@@ -8,15 +8,21 @@ let Election = new Schema({
     unique: true,
     required: true
   },
-  electionParties: [String],
+  electionParties: [{
+    name: {type: String, required: true},
+  }],
   electionName: {
     type: String,
     required: true
   },
   electionDate: {
-    type: String,
+    type: Date,
     required: true
+  },
+  electionAvailable: {
+    type: Boolean,
+    default: false
   }
 });
 
-module.exports = mongoose.model('Election', Election);
+module.exports = mongoose.model('Election', Election)

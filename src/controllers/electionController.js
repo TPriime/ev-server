@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import Election from '../models/electionModel';
-import { validateToken } from '../middleware/accessToken';
+import { validateToken, checkPartiesUnique } from '../middleware/accessToken';
 
 export default ({ config, db}) => {
 
@@ -13,12 +13,14 @@ export default ({ config, db}) => {
         try {
             let existingElection = await Election.findOne({electionCode: req.body.electionCode});
             if(existingElection) return res.status(400).json({message: 'Election with code already exist'});
+            let parties = checkPartiesUnique(req.body.electionParties);
 
             let data = {
                 electionCode: req.body.electionCode,
-                electionParties: [...new Set(req.body.electionParties)],
+                electionParties: parties,
                 electionName: req.body.electionName,
-                electionDate: req.body.electionDate
+                electionDate: req.body.electionDate,
+                electionAvailable: false
             }
 
             let election = await Election.create(data);
@@ -29,45 +31,53 @@ export default ({ config, db}) => {
                     election
                 });
             }else{
-                return res.status(401).json({message: 'Its from me'});
+                return res.status(401).json({message: 'Election not created'});
             }
         } catch (error) {
             res.status(422).json(error);
         }
     });
 
-
-    // '/evoting_api/v1/elections/:id' Endpoint to get an Election in the database by Id [Auth Required]
-     api.get('/:id', async (req, res) => {
+    // '/evoting_api/v1/elections/search' Endpoint to get an Election in the database by electionCode [Auth Required]
+    api.get('/search', async (req, res) => {
         validateToken(req, res);
 
+        let q, result;
         try {
-            let result = await Election.findById(req.params.id);
-
-            if(result) {
-                res.json(result);
+            if (req.query.electioncode) {
+                q = req.query.electioncode;
+                result = await Election.find({
+                    electionCode: {
+                        $regex: new RegExp(q,'i')
+                    }},{
+                        __v: 0
+                    });
+            }else if (req.query.electionname) {
+                q = req.query.electionname;
+                result = await Election.find({
+                    electionName: {
+                        $regex: new RegExp(q,'i')
+                    }},{
+                        __v: 0
+                    });
+            }else if (req.query.electionname && req.query.electioncode) {
+                q = req.query.electionname;
+                p = req.query.electioncode;
+                result = await Election.find({
+                    $or: [
+                        {electionName:{$regex: new RegExp(q,'i')}},
+                        {electionCode:{$regex: new RegExp(p,'i')}}
+                    ]
+                },{
+                    __v: 0
+                });
             }
-        } catch (error) {
-            res.status(417).json({ message: "Could not find requested Election"});
-        }
-    });
-
-    // '/evoting_api/v1/elections/search/:electionCode' Endpoint to get an Election in the database by electionCode [Auth Required]
-    api.get('/search/:electionCode', async (req, res) => {
-        validateToken(req, res);
-
-        let searchParam = new RegExp(req.params.electionCode,'i');
-        console.log(searchParam);
-
-        try {
-            let result = await Election.find({electionCode: searchParam});
-
-            if(result) {
-                res.json(result);
-            }
+            if(result.length === 0) res.status(401).json({message: "Election not found"});
+            res.json(result);
         } catch (error) {
             res.status(417).json({ message: "Could not find any Election"});
         }
+
     });
 
     // '/evoting_api/v1/elections/' Endpoint to access all Elections in the database [Auth Required]
@@ -89,10 +99,12 @@ export default ({ config, db}) => {
         validateToken(req, res);
 
         const id = req.params.id;
-        const {electionParties,electionName,electionDate} = req.body;
+        let {electionParties,electionName,electionDate,electionAvailable} = req.body;
+
+        electionParties = checkPartiesUnique(electionParties);
 
         try {
-            let election = await Election.findByIdAndUpdate(id, {electionParties,electionName,electionDate});
+            let election = await Election.findByIdAndUpdate(id, {electionParties,electionName,electionDate,electionAvailable});
             if (!election) return res.status(401).json({message: "No election Found"});
             res.json({message: 'Election Update successful'});
         } catch (error){

@@ -32,3 +32,18 @@ export const validateToken = (req, res) =>{
 
     if(isTokenValid === false) return res.status(407).json({ message: "Failed to verify token"});
 }
+
+export const checkPartiesUnique = (partiesArr) => {
+    partiesArr = partiesArr.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    let results = [];
+    for (let i = 0; i <= partiesArr.length - 1; i++) {
+        if (i === partiesArr.length - 1) {
+            results.push(partiesArr[i]);
+        }else{
+            if (partiesArr[i + 1].name !== partiesArr[i].name) {
+                results.push(partiesArr[i]);
+            }
+        }
+    }
+    return results;
+}

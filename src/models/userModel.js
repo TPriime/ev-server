@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
 let User = new Schema({
+    userID: {
+        type: String,
+        unique: true,
+        required: true
+    },
     firstName: {
         type: String,
         required: true
