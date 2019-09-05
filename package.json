@@ -32,11 +32,11 @@
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.4",
     "nodemailer": "^4.6.8",
+    "babel-polyfill": "^6.26.0",
     "ws": "^7.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "nodemon": "^1.19.1"
   }
