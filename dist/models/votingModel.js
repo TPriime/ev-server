@@ -6,26 +6,30 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//OT YET DONE
+
 var Schema = _mongoose2.default.Schema;
 
-var Election = new Schema({
-  electionName: {
-    type: String,
+var Vote = new Schema({
+  voter: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
     unique: true,
     required: true
   },
-  adminEmail: {
+  votes: [{
+    election: { type: String, required: true },
+    party: { type: String, required: true }
+  }],
+  device: {
     type: String,
-    unique: true,
     required: true
   },
-  adminPassword: {
-    type: String,
+  voteTime: {
+    type: Date,
     required: true
-  },
-  adminProfilePicture: String,
-  adminProfilePictureId: String
+  }
 });
 
-module.exports = _mongoose2.default.model('Election', Election);
+module.exports = _mongoose2.default.model('Vote', Vote);
 //# sourceMappingURL=votingModel.js.map

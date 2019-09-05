@@ -9,6 +9,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Schema = _mongoose2.default.Schema;
 
 var User = new Schema({
+    userID: {
+        type: String,
+        unique: true,
+        required: true
+    },
     firstName: {
         type: String,
         required: true
