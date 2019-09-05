@@ -11,6 +11,10 @@ let ElectionGroup = new Schema({
   groupDescription: {
     type: String,
     required: true
+  },
+  electionDate: {
+    type: Date,
+    required: true
   }
 });
 

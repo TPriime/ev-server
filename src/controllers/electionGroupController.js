@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import ElectionGroup from '..//models/electionGroupModel';
+import ElectionGroup from '../models/electionGroupModel';
 import { validateToken } from '../middleware/accessToken';
 
 export default ({ config, db}) => {
@@ -16,7 +16,8 @@ export default ({ config, db}) => {
 
             let data = {
                 groupName: req.body.groupName,
-                groupDescription: req.body.groupDescription
+                groupDescription: req.body.groupDescription,
+                electionDate: req.body.electionDate
             }
 
             let electionGroup = await ElectionGroup.create(data);
@@ -39,13 +40,26 @@ export default ({ config, db}) => {
         validateToken(req, res);
 
         try {
-            let q = req.query.groupName;
-            let result = await ElectionGroup.find({
-                groupName: {
-                    $regex: new RegExp(q,'i')
-                }},{
-                    __v: 0
-                });
+            let result, q;
+            if(req.query.groupName){
+                q = req.query.groupName;
+                result = await ElectionGroup.find({
+                    groupName: {
+                        $regex: new RegExp(q,'i')
+                    }},{
+                        __v: 0
+                    }
+                );
+            }else if(req.query.electionDate){
+                q = req.query.electionDate;
+                result = await ElectionGroup.find({
+                    electionDate: {
+                        $regex: new RegExp(q,'i')
+                    }},{
+                        __v: 0
+                    }
+                );
+            }
 
             if(result.length === 0) res.status(401).json({message: "Election Group not found"});
             res.json(result);
@@ -74,10 +88,10 @@ export default ({ config, db}) => {
         validateToken(req, res);
 
         const id = req.params.id;
-        let {groupName,groupDescription} = req.body;
+        let {groupName,groupDescription,electionDate} = req.body;
 
         try {
-            let electiongroups = await ElectionGroup.findByIdAndUpdate(id, {groupName,groupDescription});
+            let electiongroups = await ElectionGroup.findByIdAndUpdate(id, {groupName,groupDescription,electionDate});
             if (!electiongroups) return res.status(401).json({message: "No election group found"});
             res.json({message: 'Election Group Update successful'});
         } catch (error){

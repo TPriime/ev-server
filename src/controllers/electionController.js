@@ -60,6 +60,11 @@ export default ({ config, db}) => {
                     }},{
                         __v: 0
                     });
+
+            }else if (req.query.electionDate) {
+                q = new Date(req.query.electionDate);
+                result = await Election.find({electionDate: {$eq: q}},{__v: 0});
+
             }else if (req.query.electionname && req.query.electioncode) {
                 q = req.query.electionname;
                 p = req.query.electioncode;
@@ -75,7 +80,8 @@ export default ({ config, db}) => {
             if(result.length === 0) res.status(401).json({message: "Election not found"});
             res.json(result);
         } catch (error) {
-            res.status(417).json({ message: "Could not find any Election"});
+            console.log(error);
+            res.status(417).json({ message: "Could not find any Election", error});
         }
 
     });

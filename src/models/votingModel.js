@@ -2,22 +2,25 @@ import mongoose from 'mongoose';  //OT YET DONE
 
 let Schema = mongoose.Schema;
 
-let Votes = new Schema({
+let Vote = new Schema({
   voter: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User",
     unique: true,
     required: true
   },
-  votes: {
-    type: String,
-    unique: true,
-    required: true},
+  votes: [{
+    election:{type: String, required: true},
+    party:{type: String, required: true}
+  }],
   device: {
     type: String,
     required: true
   },
-  adminProfilePicture: String,
-  adminProfilePictureId: String,
+  voteTime:{
+    type: Date,
+    required: true
+  }
 });
 
-module.exports = mongoose.model('Votes', Votes);
+module.exports = mongoose.model('Vote', Vote);

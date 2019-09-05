@@ -6,7 +6,7 @@ import routes from './routes';
 
 let app = express();
 let server = http.createServer(app);
-let port = 4050 || process.env.PORT;
+let port = process.env.PORT || 4050;
 let bodyLimit = '1000kb';
 
 // defaults

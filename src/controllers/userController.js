@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import fs from 'fs';
 import path from 'path';
 import User from '../models/userModel';
 import { validateDisplayPicture } from '../middleware/validators/fileTypeValidators';
@@ -33,8 +32,8 @@ export default ({ config, db}) => {
             mediaFile.mv(`./tempMedia/${mediaFile.name}`); //move the file to a temp storage
             const mediaPath = path.resolve(`./tempMedia/${mediaFile.name}`);
 
-            let result = await addProfilePicture(mediaPath);
-            if(result.error) return res.status(503).json({message: "Upload was not successful"});
+            // let result = await addProfilePicture(mediaPath);
+            // if(result.error) return res.status(503).json({message: "Upload was not successful"});
 
             const data = {
                 userID: req.body.userID,
