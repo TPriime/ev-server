@@ -1,5 +1,6 @@
 import cloudinary from 'cloudinary';
 import env from '../middleware/ENV.json';
+require("babel-polyfill");
 
 cloudinary.config({
     cloud_name: env.cloud_name,

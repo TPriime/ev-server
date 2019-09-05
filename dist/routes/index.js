@@ -32,6 +32,18 @@ var _electionController = require('../controllers/electionController');
 
 var _electionController2 = _interopRequireDefault(_electionController);
 
+var _electionGroupController = require('../controllers/electionGroupController');
+
+var _electionGroupController2 = _interopRequireDefault(_electionGroupController);
+
+var _votingController = require('../controllers/votingController');
+
+var _votingController2 = _interopRequireDefault(_votingController);
+
+var _deviceController = require('../controllers/deviceController');
+
+var _deviceController2 = _interopRequireDefault(_deviceController);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = (0, _express2.default)();
@@ -44,6 +56,9 @@ var router = (0, _express2.default)();
     router.use('/users', (0, _userController2.default)({ config: _config2.default, db: db }));
     router.use('/admins', (0, _adminController2.default)({ config: _config2.default, db: db }));
     router.use('/elections', (0, _electionController2.default)({ config: _config2.default, db: db }));
+    router.use('/electiongroup', (0, _electionGroupController2.default)({ config: _config2.default, db: db }));
+    router.use('/votes', (0, _votingController2.default)({ config: _config2.default, db: db }));
+    router.use('/devices', (0, _deviceController2.default)({ config: _config2.default, db: db }));
 });
 
 exports.default = router;

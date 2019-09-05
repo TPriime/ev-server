@@ -8,28 +8,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Schema = _mongoose2.default.Schema;
 
-var Election = new Schema({
-  electionCode: {
+var ElectionGroup = new Schema({
+  groupName: {
     type: String,
     unique: true,
     required: true
   },
-  electionParties: [{
-    name: { type: String, required: true }
-  }],
-  electionName: {
+  groupDescription: {
     type: String,
     required: true
   },
   electionDate: {
     type: Date,
     required: true
-  },
-  electionAvailable: {
-    type: Boolean,
-    default: false
   }
 });
 
-module.exports = _mongoose2.default.model('Election', Election);
-//# sourceMappingURL=electionModel.js.map
+module.exports = _mongoose2.default.model('ElectionGroup', ElectionGroup);
+//# sourceMappingURL=electionGroupModel.js.map
