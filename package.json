@@ -1,6 +1,9 @@
 {
   "name": "ev_server",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.16.0"
+  },
   "description": "Electronic Voting Server",
   "main": "index.js",
   "scripts": {
