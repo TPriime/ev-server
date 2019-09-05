@@ -2,3 +2,4 @@ node_modules
 ./src/config.index.js
 ./middleware/ENV.json
 tempMedia
+src
