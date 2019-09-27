@@ -103,18 +103,18 @@ exports.default = function (_ref) {
                 while (1) {
                     switch (_context2.prev = _context2.next) {
                         case 0:
-                            (0, _accessToken.validateToken)(req, res);
+                            // validateToken(req, res);
 
                             q = void 0, p = void 0, result = void 0;
-                            _context2.prev = 2;
+                            _context2.prev = 1;
 
                             if (!req.query.device) {
-                                _context2.next = 10;
+                                _context2.next = 9;
                                 break;
                             }
 
                             q = req.query.device;
-                            _context2.next = 7;
+                            _context2.next = 6;
                             return _votingModel2.default.find({
                                 device: {
                                     $regex: new RegExp(q, 'i')
@@ -122,61 +122,61 @@ exports.default = function (_ref) {
                                 __v: 0
                             });
 
-                        case 7:
+                        case 6:
                             result = _context2.sent;
-                            _context2.next = 23;
+                            _context2.next = 22;
                             break;
 
-                        case 10:
+                        case 9:
                             if (!(req.query.election && req.query.party)) {
-                                _context2.next = 18;
+                                _context2.next = 17;
                                 break;
                             }
 
                             q = req.query.election;
                             p = req.query.party;
-                            _context2.next = 15;
+                            _context2.next = 14;
                             return _votingModel2.default.find({
                                 $and: [{ "votes.election": { $regex: new RegExp(q, 'i') } }, { "votes.party": { $regex: new RegExp(p, 'i') } }]
                             }, { __v: 0, voter: 0, _id: 0, voteTime: 0, device: 0 });
 
-                        case 15:
+                        case 14:
                             result = _context2.sent;
-                            _context2.next = 23;
+                            _context2.next = 22;
                             break;
 
-                        case 18:
+                        case 17:
                             if (!req.query.election) {
-                                _context2.next = 23;
+                                _context2.next = 22;
                                 break;
                             }
 
                             q = req.query.election;
-                            _context2.next = 22;
+                            _context2.next = 21;
                             return _votingModel2.default.find({ "votes.election": q }, { __v: 0, voter: 0, _id: 0, voteTime: 0, device: 0 });
 
-                        case 22:
+                        case 21:
                             result = _context2.sent;
 
-                        case 23:
+                        case 22:
                             if (result.length === 0) res.status(401).json({ message: "Election not found" });
                             res.json(result);
-                            _context2.next = 31;
+                            _context2.next = 30;
                             break;
 
-                        case 27:
-                            _context2.prev = 27;
-                            _context2.t0 = _context2['catch'](2);
+                        case 26:
+                            _context2.prev = 26;
+                            _context2.t0 = _context2['catch'](1);
 
                             console.log(_context2.t0);
                             res.status(417).json({ message: "Could not find any Election", error: _context2.t0 });
 
-                        case 31:
+                        case 30:
                         case 'end':
                             return _context2.stop();
                     }
                 }
-            }, _callee2, undefined, [[2, 27]]);
+            }, _callee2, undefined, [[1, 26]]);
         }));
 
         return function (_x3, _x4) {

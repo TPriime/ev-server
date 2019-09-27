@@ -6,19 +6,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _express = require('express');
 
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
 var _userModel = require('../models/userModel');
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
-var _fileTypeValidators = require('../middleware/validators/fileTypeValidators');
-
 var _accessToken = require('../middleware/accessToken');
-
-var _cloudinary = require('../middleware/cloudinary');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33,7 +25,7 @@ exports.default = function (_ref) {
     // 'evoting_api/v1/users/register' Endpoint to create a new user
     api.post('/register', function () {
         var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-            var mediaFile, isValid, existingUserID, existingUserEmail, existingUserphone, mediaPath, data, upload;
+            var mediaFile, existingCardID, existingUserEmail, existingUserphone, data, upload;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -49,68 +41,51 @@ exports.default = function (_ref) {
 
                         case 3:
                             mediaFile = req.files.userProfilePicture;
-                            isValid = (0, _fileTypeValidators.validateDisplayPicture)(mediaFile);
-
-                            if (isValid) {
-                                _context.next = 7;
-                                break;
-                            }
-
-                            return _context.abrupt('return', res.status(400).json({ message: "Please upload a valid filetype" }));
+                            _context.prev = 4;
+                            _context.next = 7;
+                            return _userModel2.default.findOne({ cardID: req.body.cardID });
 
                         case 7:
-                            _context.prev = 7;
-                            _context.next = 10;
-                            return _userModel2.default.findOne({ userID: req.body.userID });
+                            existingCardID = _context.sent;
 
-                        case 10:
-                            existingUserID = _context.sent;
-
-                            if (!existingUserID) {
-                                _context.next = 13;
+                            if (!existingCardID) {
+                                _context.next = 10;
                                 break;
                             }
 
-                            return _context.abrupt('return', res.status(400).json({ message: 'userID already in use' }));
+                            return _context.abrupt('return', res.status(400).json({ message: 'cardID already in use' }));
 
-                        case 13:
-                            _context.next = 15;
+                        case 10:
+                            _context.next = 12;
                             return _userModel2.default.findOne({ userEmail: req.body.userEmail });
 
-                        case 15:
+                        case 12:
                             existingUserEmail = _context.sent;
 
                             if (!existingUserEmail) {
-                                _context.next = 18;
+                                _context.next = 15;
                                 break;
                             }
 
                             return _context.abrupt('return', res.status(400).json({ message: 'Email already in use' }));
 
-                        case 18:
-                            _context.next = 20;
+                        case 15:
+                            _context.next = 17;
                             return _userModel2.default.findOne({ phoneNumber: req.body.phoneNumber });
 
-                        case 20:
+                        case 17:
                             existingUserphone = _context.sent;
 
                             if (!existingUserphone) {
-                                _context.next = 23;
+                                _context.next = 20;
                                 break;
                             }
 
                             return _context.abrupt('return', res.status(400).json({ message: 'Phone number already in use' }));
 
-                        case 23:
-
-                            mediaFile.mv('./tempMedia/' + mediaFile.name); //move the file to a temp storage
-                            mediaPath = _path2.default.resolve('./tempMedia/' + mediaFile.name);
-
-                            // let result = await addProfilePicture(mediaPath);
-                            // if(result.error) return res.status(503).json({message: "Upload was not successful"});
-
+                        case 20:
                             data = {
-                                userID: req.body.userID,
+                                cardID: req.body.cardID,
                                 firstName: req.body.firstName,
                                 lastName: req.body.lastName,
                                 otherNames: req.body.otherNames,
@@ -122,50 +97,46 @@ exports.default = function (_ref) {
                                 town: req.body.town,
                                 maritalStatus: req.body.maritalStatus,
                                 occupation: req.body.occupation,
-                                userEmail: req.body.userEmail, //search param
+                                userEmail: req.body.userEmail,
                                 fingerprint: req.body.fingerprint,
-                                userProfilePicture: /* result.secure_url */mediaPath,
-                                userProfilePictureId: /* result.public_id */" "
+                                userProfilePicture: JSON.stringify(mediaFile.data),
+                                userProfilePictureId: " "
                             };
-                            _context.next = 33;
+                            upload = void 0;
+                            _context.prev = 22;
+                            _context.next = 25;
                             return _userModel2.default.create(data);
 
-                        case 33:
+                        case 25:
                             upload = _context.sent;
-
-                            if (upload) {
-                                _context.next = 36;
-                                break;
-                            }
-
-                            return _context.abrupt('return', res.status(401).json({ message: "Registration was not successful" }));
-
-                        case 36:
-                            res.json({ message: 'Registration done.', upload: upload });
-
-<<<<<<< HEAD
-                            _context.next = 37;
-=======
-                            _context.next = 42;
->>>>>>> marybngozi
+                            _context.next = 31;
                             break;
 
-                        case 39:
-                            _context.prev = 39;
-                            _context.t0 = _context['catch'](7);
+                        case 28:
+                            _context.prev = 28;
+                            _context.t0 = _context['catch'](22);
+                            return _context.abrupt('return', res.status(401).json({ message: "Registration was not successful" }));
 
-                            res.status(422).json(_context.t0);
+                        case 31:
 
-<<<<<<< HEAD
-                        case 37:
-=======
-                        case 42:
->>>>>>> marybngozi
+                            res.json({ message: 'Registration done.', upload: upload });
+
+                            _context.next = 38;
+                            break;
+
+                        case 34:
+                            _context.prev = 34;
+                            _context.t1 = _context['catch'](4);
+
+                            console.log(_context.t1);
+                            res.status(422).json(_context.t1);
+
+                        case 38:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[7, 39]]);
+            }, _callee, undefined, [[4, 34], [22, 28]]);
         }));
 
         return function (_x, _x2) {
@@ -230,26 +201,24 @@ exports.default = function (_ref) {
                 while (1) {
                     switch (_context3.prev = _context3.next) {
                         case 0:
-
-                            (0, _accessToken.validateToken)(req, res);
                             id = req.params.id;
 
                             if (!(req.params.id === 'search')) {
-                                _context3.next = 42;
+                                _context3.next = 41;
                                 break;
                             }
 
                             // '/evoting_api/v1/users/search' Endpoint to get a User in the database
                             q = void 0, result = void 0;
-                            _context3.prev = 4;
+                            _context3.prev = 3;
 
                             if (!req.query.userEmail) {
-                                _context3.next = 12;
+                                _context3.next = 11;
                                 break;
                             }
 
                             q = req.query.userEmail;
-                            _context3.next = 9;
+                            _context3.next = 8;
                             return _userModel2.default.find({
                                 userEmail: {
                                     $regex: new RegExp(q, 'i')
@@ -257,19 +226,19 @@ exports.default = function (_ref) {
                                 __v: 0
                             });
 
-                        case 9:
+                        case 8:
                             result = _context3.sent;
-                            _context3.next = 33;
+                            _context3.next = 32;
                             break;
 
-                        case 12:
+                        case 11:
                             if (!req.query.firstName) {
-                                _context3.next = 19;
+                                _context3.next = 18;
                                 break;
                             }
 
                             q = req.query.firstName;
-                            _context3.next = 16;
+                            _context3.next = 15;
                             return _userModel2.default.find({
                                 firstName: {
                                     $regex: new RegExp(q, 'i')
@@ -277,19 +246,19 @@ exports.default = function (_ref) {
                                 __v: 0
                             });
 
-                        case 16:
+                        case 15:
                             result = _context3.sent;
-                            _context3.next = 33;
+                            _context3.next = 32;
                             break;
 
-                        case 19:
+                        case 18:
                             if (!req.query.lastName) {
-                                _context3.next = 26;
+                                _context3.next = 25;
                                 break;
                             }
 
                             q = req.query.lastName;
-                            _context3.next = 23;
+                            _context3.next = 22;
                             return _userModel2.default.find({
                                 lastName: {
                                     $regex: new RegExp(q, 'i')
@@ -297,80 +266,79 @@ exports.default = function (_ref) {
                                 __v: 0
                             });
 
-                        case 23:
+                        case 22:
                             result = _context3.sent;
-                            _context3.next = 33;
+                            _context3.next = 32;
                             break;
 
-                        case 26:
+                        case 25:
                             if (!(req.query.lastName && req.query.userEmail && req.query.firstName)) {
-                                _context3.next = 33;
+                                _context3.next = 32;
                                 break;
                             }
 
                             q = req.query.firstName;
                             r = req.query.lastName;
                             p = req.query.userEmail;
-                            _context3.next = 32;
+                            _context3.next = 31;
                             return _userModel2.default.find({
                                 $or: [{ firstName: { $regex: new RegExp(q, 'i') } }, { lastName: { $regex: new RegExp(r, 'i') } }, { userEmail: { $regex: new RegExp(p, 'i') } }]
                             }, {
                                 __v: 0
                             });
 
-                        case 32:
+                        case 31:
                             result = _context3.sent;
 
-                        case 33:
-                            if (result.length === 0) res.status(401).json({ message: "No user hdsjhsj found" });
+                        case 32:
+                            if (result.length === 0) res.status(401).json({ message: "No user found" });
                             res.json(result);
-                            _context3.next = 40;
+                            _context3.next = 39;
                             break;
 
-                        case 37:
-                            _context3.prev = 37;
-                            _context3.t0 = _context3['catch'](4);
+                        case 36:
+                            _context3.prev = 36;
+                            _context3.t0 = _context3['catch'](3);
 
                             res.status(417).json({ message: "Could not find any User                                                                                                                    " });
 
-                        case 40:
-                            _context3.next = 54;
+                        case 39:
+                            _context3.next = 53;
                             break;
 
-                        case 42:
-                            _context3.prev = 42;
-                            _context3.next = 45;
-                            return _userModel2.default.findOne({ userID: id }, { __v: 0 });
+                        case 41:
+                            _context3.prev = 41;
+                            _context3.next = 44;
+                            return _userModel2.default.findOne({ cardID: id }, { __v: 0 });
 
-                        case 45:
+                        case 44:
                             user = _context3.sent;
 
                             if (user) {
-                                _context3.next = 48;
+                                _context3.next = 47;
                                 break;
                             }
 
                             return _context3.abrupt('return', res.status(401).json({ message: "No user found" }));
 
-                        case 48:
-                            // convertImg2Binary(user.userProfilePicture);
+                        case 47:
 
                             res.json(user);
-                            _context3.next = 54;
+                            _context3.next = 53;
                             break;
 
-                        case 51:
-                            _context3.prev = 51;
-                            _context3.t1 = _context3['catch'](42);
+                        case 50:
+                            _context3.prev = 50;
+                            _context3.t1 = _context3['catch'](41);
 
                             res.status(422).json({ error: "The error" });
 
-                        case 54:
+                        case 53:
                         case 'end':
                             return _context3.stop();
                     }
                 }
-            }, _callee3, undefined, [[4, 37], [42, 51]]);
+            }, _callee3, undefined, [[3, 36], [41, 50]]);
         }));
 
         return function (_x5, _x6) {
