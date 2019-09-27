@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
 let User = new Schema({
-    userID: {
+    cardID: {
         type: String,
         unique: true,
         required: true

@@ -36,7 +36,7 @@ export default ({ config, db}) => {
 
     // '/evoting_api/v1/votes/search' Endpoint to get an Election in the database by electionCode [Auth Required]
     api.get('/search', async (req, res) => {
-        validateToken(req, res);
+        // validateToken(req, res);
 
         let q,p, result;
         try {
