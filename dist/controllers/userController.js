@@ -127,37 +127,45 @@ exports.default = function (_ref) {
                                 userProfilePicture: /* result.secure_url */mediaPath,
                                 userProfilePictureId: /* result.public_id */" "
                             };
-                            _context.next = 28;
+                            _context.next = 33;
                             return _userModel2.default.create(data);
 
-                        case 28:
+                        case 33:
                             upload = _context.sent;
 
                             if (upload) {
-                                _context.next = 31;
+                                _context.next = 36;
                                 break;
                             }
 
                             return _context.abrupt('return', res.status(401).json({ message: "Registration was not successful" }));
 
-                        case 31:
+                        case 36:
                             res.json({ message: 'Registration done.', upload: upload });
 
+<<<<<<< HEAD
                             _context.next = 37;
+=======
+                            _context.next = 42;
+>>>>>>> marybngozi
                             break;
 
-                        case 34:
-                            _context.prev = 34;
+                        case 39:
+                            _context.prev = 39;
                             _context.t0 = _context['catch'](7);
 
                             res.status(422).json(_context.t0);
 
+<<<<<<< HEAD
                         case 37:
+=======
+                        case 42:
+>>>>>>> marybngozi
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[7, 34]]);
+            }, _callee, undefined, [[7, 39]]);
         }));
 
         return function (_x, _x2) {
