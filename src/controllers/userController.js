@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import User from '../models/userModel';
 import { validateToken } from '../middleware/accessToken';
-require('babel-polyfill');
+// import { babel-polyfill } from "babel-polyfill";
+// require('babel-polyfill');
 
 export default ({ config, db}) => {
     let api = Router();
