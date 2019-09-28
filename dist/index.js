@@ -28,7 +28,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var app = (0, _express2.default)();
 var server = _http2.default.createServer(app);
-var port = process.env.PORT || 4050;
+var port = process.env.PORT || 5000;
 var bodyLimit = '1000kb';
 
 // defaults

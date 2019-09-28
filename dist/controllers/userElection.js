@@ -32,7 +32,7 @@ exports.default = function (_ref) {
     // '/evoting_api/v1/userelection/:id' Endpoint to get voters
     api.get('/:id', function () {
         var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-            var id, user, lgaDetails, elections;
+            var id, user, lgaDetails, elections, output;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -83,24 +83,25 @@ exports.default = function (_ref) {
                             return _context.abrupt('return', res.status(401).json({ message: "Elections not found!" }));
 
                         case 17:
+                            output = { user: user, elections: elections };
 
-                            res.json(elections);
-                            _context.next = 24;
+                            res.json(output);
+                            _context.next = 25;
                             break;
 
-                        case 20:
-                            _context.prev = 20;
+                        case 21:
+                            _context.prev = 21;
                             _context.t0 = _context['catch'](1);
 
                             console.log(_context.t0);
                             res.status(422).json({ error: "The error" });
 
-                        case 24:
+                        case 25:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[1, 20]]);
+            }, _callee, undefined, [[1, 21]]);
         }));
 
         return function (_x, _x2) {

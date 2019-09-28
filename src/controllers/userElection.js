@@ -28,7 +28,6 @@ export default ({ config, db}) => {
                 ]
             });
             if (elections.length < 1) return res.status(401).json({message: "Elections not found!"});
-            console.log(elections)
 
             let output = {user,elections};
             res.json(output);
