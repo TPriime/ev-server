@@ -6,7 +6,7 @@ import Election from '../models/electionModel';
 export default ({ config, db}) => {
 
     let api = Router();
-    elections
+
     // '/evoting_api/v1/userelection/:id' Endpoint to get voters
     api.get('/:id', async (req, res) => {
         const id = req.params.id;
@@ -20,18 +20,18 @@ export default ({ config, db}) => {
             if (!lgaDetails) return res.status(401).json({message: "LGA not found"});
 
             // To get the three (3) elections
-            let userElections = await Election.find({
+            let elections = await Election.find({
                 $or: [
                     {electionCode:lgaDetails.FC},
                     {electionCode:lgaDetails.SD},
                     {electionCode:"PD/111/NIG"}
                 ]
             });
-            if (userElections.length < 1) return res.status(401).json({message: "Elections not found!"});
-            console.log(userElections)
+            if (elections.length < 1) return res.status(401).json({message: "Elections not found!"});
+            console.log(elections)
 
-            // let output = {user, elections:elections};
-            res.json(userElections);
+            let output = {user,elections};
+            res.json(output);
         } catch (error) {
             console.log(error);
             res.status(422).json({error: "The error"});
