@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import User from '../models/userModel';
 import { validateToken } from '../middleware/accessToken';
-require('babel-polyfill');
+let uuid4 = require('uuid4');
+//  require('babel-polyfill');//////////////
 
 export default ({ config, db}) => {
     let api = Router();
@@ -24,7 +25,10 @@ export default ({ config, db}) => {
             let existingUserphone = await User.findOne({phoneNumber: req.body.phoneNumber});
             if (existingUserphone) return res.status(400).json({message: 'Phone number already in use'});
 
+            let userid = uuid4();
+
             const data = {
+                userID: userid,
                 cardID: req.body.cardID,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
@@ -34,7 +38,6 @@ export default ({ config, db}) => {
                 gender: req.body.gender,
                 state: req.body.state,
                 lga: req.body.lga,
-                town: req.body.town,
                 maritalStatus: req.body.maritalStatus,
                 occupation: req.body.occupation,
                 userEmail: req.body.userEmail,

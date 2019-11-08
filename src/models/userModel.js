@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
 let User = new Schema({
+    userID: {
+        type: String,
+        unique: true,
+        required: true
+    },
     cardID: {
         type: String,
         unique: true,
@@ -43,10 +48,6 @@ let User = new Schema({
         required: true
     },
     lga: {
-        type: String,
-        required: true
-    },
-    town: {
         type: String,
         required: true
     },

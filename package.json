@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/tpriime/ev_server#readme",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.13.2",
     "express": "^4.17.1",
@@ -33,7 +34,7 @@
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.4",
     "nodemailer": "^4.6.8",
-    "babel-polyfill": "^6.26.0",
+    "uuid4": "^1.1.4",
     "ws": "^7.1.2"
   },
   "devDependencies": {

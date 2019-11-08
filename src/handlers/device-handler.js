@@ -22,8 +22,8 @@ let prev_id;
 
 function start_server(server, server_port){
     wsServer = new WebsocketServer({server});
-    port = server_port
-
+    port = server_port || 8080
+    
     wsServer.on('connection', (ws)=>{
         ws.id = ws.id || NODEF
         log(ws, ' connected');
@@ -77,7 +77,7 @@ function get_send_voter_details(ws, voter_id){
             data = JSON.parse(data);
             
             let user_data = {};
-            user_data.id = data.userID,
+            user_data.id = data._id,
             user_data.name = data.firstName,
             user_data.surname = data.lastName,
             user_data.othername = data.otherNames,    
@@ -85,9 +85,15 @@ function get_send_voter_details(ws, voter_id){
             user_data.state =  data.state,
             user_data.town = data.town,
             user_data.lga = data.lga,
-            user_data.fingerprint = data.fingerprint,
-            user_data.image = JSON.parse(data.userProfilePicture)
+            user_data.fingerprint = data.fingerprint
 
+            try{
+                user_data.image = JSON.parse(data.userProfilePicture)
+            } catch(err){
+                console.log(err)
+                user_data.image = {data: [255,216]}
+            }
+            
             ws_send(ws, 'user_data', user_data)        
         })
     })
@@ -97,10 +103,11 @@ function get_send_voter_details(ws, voter_id){
 function fetch_send_election_data(ws, user_data){
     let [user_id, user_lga] = user_data.split(";")
     
+
     let req_msg = {
         hostname: "localhost",
         port: port,
-        path: "/evoting_api/v1/elections/search?electioncode=SD/032/AB",           //will be either userid or local government
+        path: "/evoting_api/v1/userelection/"+user_lga,
         method: "GET",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -120,6 +127,8 @@ function fetch_send_election_data(ws, user_data){
     
                 let constr_data = {};
                 constr_data.title = election.electionName;
+
+                constr_data.code = election.electionCode;
                 constr_data.parties = [];
                 for(let parties in election.electionParties)
                     constr_data.parties.push(election.electionParties[parties].name)
@@ -131,7 +140,6 @@ function fetch_send_election_data(ws, user_data){
             ws_send(ws, "Election Data", reply)
         })
         
-        
     })
 
     request.on('error', error=>console.log(error))
@@ -139,7 +147,30 @@ function fetch_send_election_data(ws, user_data){
 
 
 function recordVote(ws, vote_data){
-    log(ws, vote_data)
+    let req_msg = {
+        hostname: "localhost",
+        port: port,
+        path: "/evoting_api/v1/votes/cast",
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+        
+
+    let request = http.request(req_msg, res=>{
+        let data = ''
+        res.on('data', chunk=>data+=chunk)
+        res.on('end', ()=>{
+            console.log(data) ////////////////////////////////////////////////////////////////
+        })
+    })
+
+    request.on('error', error=>console.log(error))
+    request.write(JSON.stringify(vote_data))
+    request.end();
+   
+    /*@debug*/log(ws, vote_data)
 }
 
 

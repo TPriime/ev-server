@@ -4,9 +4,11 @@ import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import routes from './routes';
 
+/*@prime*/import device_handler from './handlers/device-handler';
+
 let app = express();
 let server = http.createServer(app);
-let port = process.env.PORT || 5000;
+let port = process.env.PORT || 8000;
 let bodyLimit = '1000kb';
 
 // defaults
@@ -34,7 +36,11 @@ app.use(function(req, res, next) {
 // api routes v1
 app.use('/evoting_api/v1', routes);
 
-server.listen(port);
-console.log(`server running on port ${server.address().port}`);
+/*@prime*/
+server.listen(port, ()=>
+    console.log(`server running on port ${server.address().port}`));
+
+device_handler.start_server(server, port);
+/*@prime*/
 
 export default app;

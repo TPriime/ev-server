@@ -50,7 +50,7 @@ exports.default = function (_ref) {
                                 voter: req.body.voter,
                                 votes: req.body.votes,
                                 device: req.body.device,
-                                voteTime: req.body.voteTime
+                                voteTime: new Date(req.body.voteTime)
                             };
                             _context.next = 9;
                             return _votingModel2.default.create(data);
@@ -64,8 +64,7 @@ exports.default = function (_ref) {
                             }
 
                             res.json({
-                                message: "Vote Counted Successfully",
-                                votes: votes
+                                message: "Vote Counted Successfully"
                             });
                             _context.next = 15;
                             break;

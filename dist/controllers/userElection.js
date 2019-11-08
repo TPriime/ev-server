@@ -6,10 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _express = require('express');
 
-var _userModel = require('../models/userModel');
-
-var _userModel2 = _interopRequireDefault(_userModel);
-
 var _lgaModel = require('../models/lgaModel');
 
 var _lgaModel2 = _interopRequireDefault(_lgaModel);
@@ -29,79 +25,64 @@ exports.default = function (_ref) {
 
     var api = (0, _express.Router)();
 
-    // '/evoting_api/v1/userelection/:id' Endpoint to get voters
-    api.get('/:id', function () {
+    // '/evoting_api/v1/userelection/:lga' Endpoint to get voters
+    api.get('/:lga', function () {
         var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-            var id, user, lgaDetails, elections, output;
+            var user_lga, lgaDetails, elections;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
-                            id = req.params.id;
+                            user_lga = req.params.lga;
                             _context.prev = 1;
                             _context.next = 4;
-                            return _userModel2.default.findOne({ cardID: id }, { __v: 0 });
+                            return _lgaModel2.default.findOne({ LGA: user_lga });
 
                         case 4:
-                            user = _context.sent;
-
-                            if (user) {
-                                _context.next = 7;
-                                break;
-                            }
-
-                            return _context.abrupt('return', res.status(401).json({ message: "No user found" }));
-
-                        case 7:
-                            _context.next = 9;
-                            return _lgaModel2.default.findOne({ LGA: user.lga });
-
-                        case 9:
                             lgaDetails = _context.sent;
 
                             if (lgaDetails) {
-                                _context.next = 12;
+                                _context.next = 7;
                                 break;
                             }
 
                             return _context.abrupt('return', res.status(401).json({ message: "LGA not found" }));
 
-                        case 12:
-                            _context.next = 14;
+                        case 7:
+                            _context.next = 9;
                             return _electionModel2.default.find({
                                 $or: [{ electionCode: lgaDetails.FC }, { electionCode: lgaDetails.SD }, { electionCode: "PD/111/NIG" }]
                             });
 
-                        case 14:
+                        case 9:
                             elections = _context.sent;
 
                             if (!(elections.length < 1)) {
-                                _context.next = 17;
+                                _context.next = 12;
                                 break;
                             }
 
                             return _context.abrupt('return', res.status(401).json({ message: "Elections not found!" }));
 
-                        case 17:
-                            output = { user: user, elections: elections };
+                        case 12:
 
-                            res.json(output);
-                            _context.next = 25;
+                            res.json(elections);
+                            _context.next = 19;
                             break;
 
-                        case 21:
-                            _context.prev = 21;
+                        case 15:
+                            _context.prev = 15;
                             _context.t0 = _context['catch'](1);
 
                             console.log(_context.t0);
                             res.status(422).json({ error: "The error" });
 
-                        case 25:
+                        case 19:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[1, 21]]);
+            }, _callee, undefined, [[1, 15]]);
         }));
 
         return function (_x, _x2) {

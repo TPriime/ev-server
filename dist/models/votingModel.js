@@ -19,6 +19,7 @@ var Vote = new Schema({
   },
   votes: [{
     election: { type: String, required: true },
+    electionCode: { type: String, required: true },
     party: { type: String, required: true }
   }],
   device: {

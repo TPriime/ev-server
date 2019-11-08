@@ -16,7 +16,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-require('babel-polyfill');
+var uuid4 = require('uuid4');
+require('babel-polyfill'); //////////////
 
 exports.default = function (_ref) {
     var config = _ref.config,
@@ -27,7 +28,7 @@ exports.default = function (_ref) {
     // 'evoting_api/v1/users/register' Endpoint to create a new user
     api.post('/register', function () {
         var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-            var mediaFile, existingCardID, existingUserEmail, existingUserphone, data, upload;
+            var mediaFile, existingCardID, existingUserEmail, existingUserphone, userid, data, upload;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -86,7 +87,9 @@ exports.default = function (_ref) {
                             return _context.abrupt('return', res.status(400).json({ message: 'Phone number already in use' }));
 
                         case 20:
+                            userid = uuid4();
                             data = {
+                                userID: userid,
                                 cardID: req.body.cardID,
                                 firstName: req.body.firstName,
                                 lastName: req.body.lastName,
@@ -96,7 +99,6 @@ exports.default = function (_ref) {
                                 gender: req.body.gender,
                                 state: req.body.state,
                                 lga: req.body.lga,
-                                town: req.body.town,
                                 maritalStatus: req.body.maritalStatus,
                                 occupation: req.body.occupation,
                                 userEmail: req.body.userEmail,
@@ -105,40 +107,40 @@ exports.default = function (_ref) {
                                 userProfilePictureId: " "
                             };
                             upload = void 0;
-                            _context.prev = 22;
-                            _context.next = 25;
+                            _context.prev = 23;
+                            _context.next = 26;
                             return _userModel2.default.create(data);
 
-                        case 25:
+                        case 26:
                             upload = _context.sent;
-                            _context.next = 31;
+                            _context.next = 32;
                             break;
 
-                        case 28:
-                            _context.prev = 28;
-                            _context.t0 = _context['catch'](22);
+                        case 29:
+                            _context.prev = 29;
+                            _context.t0 = _context['catch'](23);
                             return _context.abrupt('return', res.status(401).json({ message: "Registration was not successful" }));
 
-                        case 31:
+                        case 32:
 
                             res.json({ message: 'Registration done.', upload: upload });
 
-                            _context.next = 38;
+                            _context.next = 39;
                             break;
 
-                        case 34:
-                            _context.prev = 34;
+                        case 35:
+                            _context.prev = 35;
                             _context.t1 = _context['catch'](4);
 
                             console.log(_context.t1);
                             res.status(422).json(_context.t1);
 
-                        case 38:
+                        case 39:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[4, 34], [22, 28]]);
+            }, _callee, undefined, [[4, 35], [23, 29]]);
         }));
 
         return function (_x, _x2) {
