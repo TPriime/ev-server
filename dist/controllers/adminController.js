@@ -24,7 +24,7 @@ exports.default = function (_ref) {
 
     var api = (0, _express.Router)();
 
-    // 'evoting_api/v1/admins/register' Endpoint to create a new admin
+    // '/evoting_api/v1/admins/register' Endpoint to create a new admin
     api.post('/register', function () {
         var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
             var encryptedPassword, data, existingAdminEmails, admin;
@@ -147,6 +147,7 @@ exports.default = function (_ref) {
                             res.json({
                                 authenticated: true,
                                 adminId: admin._id,
+                                admin: admin,
                                 token: token
                             });
 

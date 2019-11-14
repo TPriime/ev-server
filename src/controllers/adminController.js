@@ -6,7 +6,7 @@ import { setToken, validateToken } from '../middleware/accessToken';
 export default ({ config, db}) => {
     let api = Router();
 
-    // 'evoting_api/v1/admins/register' Endpoint to create a new admin
+    // '/evoting_api/v1/admins/register' Endpoint to create a new admin
     api.post('/register', async (req, res) => {
         const encryptedPassword = hashPassword(req.body.adminPassword);
         const data = {
@@ -48,6 +48,7 @@ export default ({ config, db}) => {
                 res.json({
                     authenticated: true,
                     adminId: admin._id,
+		    admin,
                     token: token
                 })
             }

@@ -14,6 +14,11 @@ var User = new Schema({
         unique: true,
         required: true
     },
+    cardID: {
+        type: String,
+        unique: true,
+        required: true
+    },
     firstName: {
         type: String,
         required: true
@@ -49,10 +54,6 @@ var User = new Schema({
         required: true
     },
     lga: {
-        type: String,
-        required: true
-    },
-    town: {
         type: String,
         required: true
     },

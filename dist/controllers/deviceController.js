@@ -127,42 +127,56 @@ exports.default = function (_ref) {
 
                         case 7:
                             result = _context2.sent;
-                            _context2.next = 15;
+                            _context2.next = 22;
                             break;
 
                         case 10:
                             if (!req.query.status) {
-                                _context2.next = 15;
+                                _context2.next = 17;
                                 break;
                             }
 
                             q = req.query.status;
                             _context2.next = 14;
-                            return _deviceModel2.default.find({ status: q }, { __v: 0
-                            });
+                            return _deviceModel2.default.find({ status: q }, { __v: 0 });
 
                         case 14:
                             result = _context2.sent;
-
-                        case 15:
-
-                            if (result.length === 0) res.status(401).json({ message: "Election Group not found" });
-                            res.json(result);
                             _context2.next = 22;
                             break;
 
-                        case 19:
-                            _context2.prev = 19;
-                            _context2.t0 = _context2['catch'](1);
+                        case 17:
+                            if (!req.query.id) {
+                                _context2.next = 22;
+                                break;
+                            }
 
-                            res.status(417).json({ message: "Could not find any the Group" });
+                            q = req.query.id;
+                            _context2.next = 21;
+                            return _deviceModel2.default.find({ _id: q }, { __v: 0 });
+
+                        case 21:
+                            result = _context2.sent;
 
                         case 22:
+
+                            if (result.length === 0) res.status(401).json({ message: "Device not found" });
+                            res.json(result);
+                            _context2.next = 29;
+                            break;
+
+                        case 26:
+                            _context2.prev = 26;
+                            _context2.t0 = _context2['catch'](1);
+
+                            res.status(417).json({ message: "Could not find the device" });
+
+                        case 29:
                         case 'end':
                             return _context2.stop();
                     }
                 }
-            }, _callee2, undefined, [[1, 19]]);
+            }, _callee2, undefined, [[1, 26]]);
         }));
 
         return function (_x3, _x4) {

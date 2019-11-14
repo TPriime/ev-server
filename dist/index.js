@@ -24,11 +24,17 @@ var _routes = require('./routes');
 
 var _routes2 = _interopRequireDefault(_routes);
 
+var _deviceHandler = require('./handlers/device-handler');
+
+var _deviceHandler2 = _interopRequireDefault(_deviceHandler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+
+/*@prime*/
 var server = _http2.default.createServer(app);
-var port = process.env.PORT || 5041;
+var port = process.env.PORT || 8000;
 var bodyLimit = '1000kb';
 
 // defaults
@@ -56,8 +62,13 @@ app.use(function (req, res, next) {
 // api routes v1
 app.use('/evoting_api/v1', _routes2.default);
 
-server.listen(port);
-console.log('server running on port ' + server.address().port);
+/*@prime*/
+server.listen(port, function () {
+    return console.log('server running on port ' + server.address().port);
+});
+
+_deviceHandler2.default.start_server(server, port);
+/*@prime*/
 
 exports.default = app;
 //# sourceMappingURL=index.js.map

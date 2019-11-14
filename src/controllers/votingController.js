@@ -16,15 +16,14 @@ export default ({ config, db}) => {
                 voter: req.body.voter,
                 votes: req.body.votes,
                 device: req.body.device,
-                voteTime: req.body.voteTime
+                voteTime: new Date(req.body.voteTime)
             }
 
             let votes = await Vote.create(data);
 
             if(votes) {
                 res.json({
-                    message: "Vote Counted Successfully",
-                    votes
+                    message: "Vote Counted Successfully"
                 });
             }else{
                 return res.status(401).json({message: 'Voting not Successful!'});
@@ -36,7 +35,7 @@ export default ({ config, db}) => {
 
     // '/evoting_api/v1/votes/search' Endpoint to get an Election in the database by electionCode [Auth Required]
     api.get('/search', async (req, res) => {
-        validateToken(req, res);
+        // validateToken(req, res);
 
         let q,p, result;
         try {
@@ -76,9 +75,10 @@ export default ({ config, db}) => {
     api.get('/', async (req, res) => {
 
         try {
-            let votes = await Vote.find({},{__v:0, voter:0, voteTime:0, device:0, _id:0});
+            let votes = await Vote.find({},{__v:0, voteTime:0, device:0, _id:0}).populate({path: 'voter', select: ['state','lga']});
 
             if(votes === 0) return res.status(401).json({message: "No Vote found"});
+
             res.json(votes);
         } catch (error) {
             res.status(417).json({message: "Could not get the required data"});
