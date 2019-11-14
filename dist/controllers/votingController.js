@@ -193,7 +193,7 @@ exports.default = function (_ref) {
                         case 0:
                             _context3.prev = 0;
                             _context3.next = 3;
-                            return _votingModel2.default.find({}, { __v: 0, voter: 0, voteTime: 0, device: 0, _id: 0 });
+                            return _votingModel2.default.find({}, { __v: 0, voteTime: 0, device: 0, _id: 0 }).populate({ path: 'voter', select: ['state', 'lga'] });
 
                         case 3:
                             votes = _context3.sent;
@@ -206,6 +206,7 @@ exports.default = function (_ref) {
                             return _context3.abrupt('return', res.status(401).json({ message: "No Vote found" }));
 
                         case 6:
+
                             res.json(votes);
                             _context3.next = 12;
                             break;

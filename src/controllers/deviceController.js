@@ -53,15 +53,16 @@ export default ({ config, db}) => {
                 );
             }else if(req.query.status){
                 q = req.query.status;
-                result = await Device.find({status: q},{__v: 0
-                    }
-                );
+                result = await Device.find({status: q},{__v: 0});
+            }else if(req.query.id){
+                q = req.query.id;
+                result = await Device.find({_id: q},{__v: 0});
             }
 
-            if(result.length === 0) res.status(401).json({message: "Election Group not found"});
+            if(result.length === 0) res.status(401).json({message: "Device not found"});
             res.json(result);
         } catch (error) {
-            res.status(417).json({ message: "Could not find any the Group"});
+            res.status(417).json({ message: "Could not find the device"});
         }
 
     });

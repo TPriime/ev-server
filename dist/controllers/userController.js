@@ -197,7 +197,7 @@ exports.default = function (_ref) {
         };
     }());
 
-    // 'evoting_api/v1/users/id' Endpoint to get a user and search user included!!!
+    // '/evoting_api/v1/users/id' Endpoint to get a user and search user included!!!
     api.get('/:id', function () {
         var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
             var id, q, result, user;
@@ -313,7 +313,11 @@ exports.default = function (_ref) {
                         case 41:
                             _context3.prev = 41;
                             _context3.next = 44;
-                            return _userModel2.default.findOne({ cardID: id }, { __v: 0 });
+                            return _userModel2.default.findOne({
+                                $or: [{ cardID: id }, { _id: id }]
+                            }, {
+                                __v: 0
+                            });
 
                         case 44:
                             user = _context3.sent;
@@ -350,10 +354,10 @@ exports.default = function (_ref) {
         };
     }());
 
-    // 'evoting_api/v1/users/update/:id' Endpoint to update any user parameters
+    // '/evoting_api/v1/users/update/:id' Endpoint to update any user parameters
     api.put('/update/:id', function () {
         var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
-            var id, _req$body, firstName, lastName, otherNames, dateOfBirth, gender, state, lga, town, maritalStatus, occupation, user;
+            var id, _req$body, firstName, lastName, otherNames, dateOfBirth, gender, state, lga, maritalStatus, occupation, user;
 
             return regeneratorRuntime.wrap(function _callee4$(_context4) {
                 while (1) {
@@ -361,38 +365,40 @@ exports.default = function (_ref) {
                         case 0:
                             (0, _accessToken.validateToken)(req, res);
                             id = req.params.id;
-                            _req$body = req.body, firstName = _req$body.firstName, lastName = _req$body.lastName, otherNames = _req$body.otherNames, dateOfBirth = _req$body.dateOfBirth, gender = _req$body.gender, state = _req$body.state, lga = _req$body.lga, town = _req$body.town, maritalStatus = _req$body.maritalStatus, occupation = _req$body.occupation;
-                            _context4.prev = 3;
-                            _context4.next = 6;
-                            return _userModel2.default.findByIdAndUpdate(id, { firstName: firstName, lastName: lastName, otherNames: otherNames, dateOfBirth: dateOfBirth, gender: gender, state: state, lga: lga, town: town, maritalStatus: maritalStatus, occupation: occupation });
 
-                        case 6:
+                            console.log(req.body);
+                            _req$body = req.body, firstName = _req$body.firstName, lastName = _req$body.lastName, otherNames = _req$body.otherNames, dateOfBirth = _req$body.dateOfBirth, gender = _req$body.gender, state = _req$body.state, lga = _req$body.lga, maritalStatus = _req$body.maritalStatus, occupation = _req$body.occupation;
+                            _context4.prev = 4;
+                            _context4.next = 7;
+                            return _userModel2.default.findByIdAndUpdate(id, { firstName: firstName, lastName: lastName, otherNames: otherNames, dateOfBirth: dateOfBirth, gender: gender, state: state, lga: lga, maritalStatus: maritalStatus, occupation: occupation });
+
+                        case 7:
                             user = _context4.sent;
 
                             if (user) {
-                                _context4.next = 9;
+                                _context4.next = 10;
                                 break;
                             }
 
                             return _context4.abrupt('return', res.status(401).json({ message: "No user found" }));
 
-                        case 9:
+                        case 10:
                             res.json({ message: 'Update successful' });
-                            _context4.next = 15;
+                            _context4.next = 16;
                             break;
 
-                        case 12:
-                            _context4.prev = 12;
-                            _context4.t0 = _context4['catch'](3);
+                        case 13:
+                            _context4.prev = 13;
+                            _context4.t0 = _context4['catch'](4);
 
                             res.status(422).json({ error: _context4.t0 });
 
-                        case 15:
+                        case 16:
                         case 'end':
                             return _context4.stop();
                     }
                 }
-            }, _callee4, undefined, [[3, 12]]);
+            }, _callee4, undefined, [[4, 13]]);
         }));
 
         return function (_x7, _x8) {
@@ -400,7 +406,7 @@ exports.default = function (_ref) {
         };
     }());
 
-    // 'evoting_api/v1/users/delete/:id' Endpoint to delete any user
+    // '/evoting_api/v1/users/delete/:id' Endpoint to delete any user
     api.delete('/delete/:id', function () {
         var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
             var id, user;

@@ -10,7 +10,7 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var mongoUrl = process.env.MONGODB_URI || "mongodb://192.168.8.101:27017/evoting";
+var mongoUrl = process.env.MONGODB_URI || "mongodb://localhost:27017/evoting";
 
 exports.default = function (callback) {
     var db = _mongoose2.default.connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true });

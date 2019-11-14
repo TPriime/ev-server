@@ -2,7 +2,7 @@ import { Router } from 'express';
 import User from '../models/userModel';
 import { validateToken } from '../middleware/accessToken';
 let uuid4 = require('uuid4');
-//  require('babel-polyfill');//////////////
+require('babel-polyfill');//////////////
 
 export default ({ config, db}) => {
     let api = Router();
@@ -76,7 +76,7 @@ export default ({ config, db}) => {
         }
     });
 
-    // 'evoting_api/v1/users/id' Endpoint to get a user and search user included!!!
+    // '/evoting_api/v1/users/id' Endpoint to get a user and search user included!!!
     api.get('/:id', async (req, res)=> {
 
         const id = req.params.id;
@@ -128,7 +128,14 @@ export default ({ config, db}) => {
             }
         }else{
             try {
-                let user = await User.findOne({cardID: id},{__v: 0});
+                let user = await User.findOne({
+                    $or: [
+                        {cardID: id},
+                        {_id: id}
+                    ]
+                },{
+                    __v: 0
+                });
 
                 if (!user) return res.status(401).json({message: "No user found"});
 
@@ -139,14 +146,15 @@ export default ({ config, db}) => {
         }
     });
 
-    // 'evoting_api/v1/users/update/:id' Endpoint to update any user parameters
+    // '/evoting_api/v1/users/update/:id' Endpoint to update any user parameters
     api.put('/update/:id', async (req, res) => {
         validateToken(req, res);
         const id = req.params.id;
-        const {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,town,maritalStatus,occupation} = req.body;
+        console.log(req.body);
+        const {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,maritalStatus,occupation} = req.body;
 
         try {
-            let user = await User.findByIdAndUpdate(id, {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,town,maritalStatus,occupation});
+            let user = await User.findByIdAndUpdate(id, {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,maritalStatus,occupation});
             if (!user) return res.status(401).json({message: "No user found"});
             res.json({message: 'Update successful'});
         } catch (error){
@@ -154,7 +162,7 @@ export default ({ config, db}) => {
         }
     });
 
-    // 'evoting_api/v1/users/delete/:id' Endpoint to delete any user
+    // '/evoting_api/v1/users/delete/:id' Endpoint to delete any user
     api.delete('/delete/:id', async (req, res) => {
 
         validateToken(req, res);

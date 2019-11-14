@@ -34,7 +34,7 @@ var app = (0, _express2.default)();
 
 /*@prime*/
 var server = _http2.default.createServer(app);
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8000;
 var bodyLimit = '1000kb';
 
 // defaults

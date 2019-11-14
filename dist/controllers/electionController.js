@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _express = require('express');
 
 var _electionModel = require('../models/electionModel');
@@ -26,7 +28,7 @@ exports.default = function (_ref) {
     // '/evoting_api/v1/elections/create' Endpoint to create a new Election [Auth Required]
     api.post('/create', function () {
         var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-            var existingElection, parties, data, election;
+            var parties, existingElection, data, election;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -34,21 +36,27 @@ exports.default = function (_ref) {
                             (0, _accessToken.validateToken)(req, res);
 
                             _context.prev = 1;
-                            _context.next = 4;
+                            parties = void 0;
+                            _context.next = 5;
                             return _electionModel2.default.findOne({ electionCode: req.body.electionCode });
 
-                        case 4:
+                        case 5:
                             existingElection = _context.sent;
 
                             if (!existingElection) {
-                                _context.next = 7;
+                                _context.next = 8;
                                 break;
                             }
 
                             return _context.abrupt('return', res.status(400).json({ message: 'Election with code already exist' }));
 
-                        case 7:
-                            parties = (0, _accessToken.checkPartiesUnique)(req.body.electionParties);
+                        case 8:
+                            if (typeof req.body.electionParties === 'string') {
+                                parties = JSON.parse(req.body.electionParties);
+                            } else if (_typeof(req.body.electionParties) === 'object') {
+                                parties = req.body.electionParties;
+                            }
+
                             data = {
                                 electionCode: req.body.electionCode,
                                 electionParties: parties,
@@ -56,14 +64,14 @@ exports.default = function (_ref) {
                                 electionDate: req.body.electionDate,
                                 electionAvailable: false
                             };
-                            _context.next = 11;
+                            _context.next = 12;
                             return _electionModel2.default.create(data);
 
-                        case 11:
+                        case 12:
                             election = _context.sent;
 
                             if (!election) {
-                                _context.next = 16;
+                                _context.next = 17;
                                 break;
                             }
 
@@ -71,28 +79,28 @@ exports.default = function (_ref) {
                                 message: "Election Created Successfully",
                                 election: election
                             });
-                            _context.next = 17;
+                            _context.next = 18;
                             break;
-
-                        case 16:
-                            return _context.abrupt('return', res.status(401).json({ message: 'Election not created' }));
 
                         case 17:
-                            _context.next = 22;
+                            return _context.abrupt('return', res.status(401).json({ message: 'Election not created' }));
+
+                        case 18:
+                            _context.next = 23;
                             break;
 
-                        case 19:
-                            _context.prev = 19;
+                        case 20:
+                            _context.prev = 20;
                             _context.t0 = _context['catch'](1);
 
                             res.status(422).json(_context.t0);
 
-                        case 22:
+                        case 23:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[1, 19]]);
+            }, _callee, undefined, [[1, 20]]);
         }));
 
         return function (_x, _x2) {
@@ -274,7 +282,11 @@ exports.default = function (_ref) {
                             _req$body = req.body, electionParties = _req$body.electionParties, electionName = _req$body.electionName, electionDate = _req$body.electionDate, electionAvailable = _req$body.electionAvailable;
 
 
-                            electionParties = (0, _accessToken.checkPartiesUnique)(electionParties);
+                            if (typeof electionParties === 'string') {
+                                electionParties = JSON.parse(electionParties);
+                            } else if ((typeof electionParties === 'undefined' ? 'undefined' : _typeof(electionParties)) === 'object') {
+                                electionParties = electionParties;
+                            }
 
                             _context4.prev = 4;
                             _context4.next = 7;

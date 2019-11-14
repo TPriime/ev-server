@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import Election from '../models/electionModel';
-import { validateToken, checkPartiesUnique } from '../middleware/accessToken';
+import { validateToken } from '../middleware/accessToken';
 
 export default ({ config, db}) => {
 
@@ -11,9 +11,14 @@ export default ({ config, db}) => {
         validateToken(req, res);
 
         try {
+            let parties;
             let existingElection = await Election.findOne({electionCode: req.body.electionCode});
             if(existingElection) return res.status(400).json({message: 'Election with code already exist'});
-            let parties = checkPartiesUnique(req.body.electionParties);
+            if (typeof req.body.electionParties === 'string') {
+                parties = JSON.parse(req.body.electionParties);
+            }else if (typeof req.body.electionParties === 'object'){
+                parties = req.body.electionParties;
+            }
 
             let data = {
                 electionCode: req.body.electionCode,
@@ -107,7 +112,11 @@ export default ({ config, db}) => {
         const id = req.params.id;
         let {electionParties,electionName,electionDate,electionAvailable} = req.body;
 
-        electionParties = checkPartiesUnique(electionParties);
+        if (typeof electionParties === 'string') {
+            electionParties = JSON.parse(electionParties);
+        }else if (typeof electionParties === 'object'){
+            electionParties = electionParties;
+        }
 
         try {
             let election = await Election.findByIdAndUpdate(id, {electionParties,electionName,electionDate,electionAvailable});
