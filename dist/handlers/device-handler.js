@@ -44,7 +44,12 @@ function handle_connection(ws) {
         if (msg.header.method === method.GET) switch (msg.header.title) {
             case 'USER_DATA':
                 var voter_id = msg.body.msg;
-                get_send_voter_details(ws, voter_id);break;
+                try {
+                    get_send_voter_details(ws, voter_id);
+                } catch (error) {
+                    console.log(error);
+                }
+                break;
 
             case 'ELECTION_DATA':
                 fetch_send_election_data(ws, msg.body.msg);break;
@@ -60,10 +65,11 @@ function handle_connection(ws) {
 }
 
 function get_send_voter_details(ws, voter_id) {
+
     http.get({
         hostname: 'localhost',
         port: port,
-        path: '/evoting_api/v1/users/' + voter_id
+        path: "/evoting_api/v1/users/" + voter_id
     }, function (res) {
         var data = '';
         res.on('data', function (chunk) {

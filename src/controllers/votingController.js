@@ -10,7 +10,7 @@ export default ({ config, db}) => {
     api.post('/cast', async (req, res) => {
         try {
             let voterID = await Vote.findById(req.body.voter);
-            if(voterID) return res.status(400).json({message: 'Voter has Voted Before!!!'});
+            if(voterID) {return res.status(400).json({message: 'Voter has Voted Before!!!'})};
 
             let data = {
                 voter: req.body.voter,
