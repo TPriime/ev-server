@@ -2,7 +2,7 @@ import { Router } from 'express';
 import User from '../models/userModel';
 import { validateToken } from '../middleware/accessToken';
 let uuid4 = require('uuid4');
-// require('babel-polyfill');//////////////
+require('babel-polyfill');//////////////
 
 export default ({ config, db}) => {
     let api = Router();

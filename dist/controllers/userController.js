@@ -307,46 +307,53 @@ exports.default = function (_ref) {
                             res.status(417).json({ message: "Could not find any User                                                                                                                    " });
 
                         case 39:
-                            _context3.next = 53;
+                            _context3.next = 57;
                             break;
 
                         case 41:
                             _context3.prev = 41;
                             _context3.next = 44;
-                            return _userModel2.default.findOne({
-                                $or: [{ cardID: id }, { _id: id }]
-                            }, {
-                                __v: 0
-                            });
+                            return _userModel2.default.findOne({ cardID: id }, { __v: 0 });
 
                         case 44:
                             user = _context3.sent;
 
                             if (user) {
-                                _context3.next = 47;
+                                _context3.next = 51;
+                                break;
+                            }
+
+                            _context3.next = 48;
+                            return _userModel2.default.findOne({ _id: id }, { __v: 0 });
+
+                        case 48:
+                            user = _context3.sent;
+
+                            if (user) {
+                                _context3.next = 51;
                                 break;
                             }
 
                             return _context3.abrupt('return', res.status(401).json({ message: "No user found" }));
 
-                        case 47:
+                        case 51:
 
                             res.json(user);
-                            _context3.next = 53;
+                            _context3.next = 57;
                             break;
 
-                        case 50:
-                            _context3.prev = 50;
+                        case 54:
+                            _context3.prev = 54;
                             _context3.t1 = _context3['catch'](41);
 
                             res.status(422).json({ error: "The error" });
 
-                        case 53:
+                        case 57:
                         case 'end':
                             return _context3.stop();
                     }
                 }
-            }, _callee3, undefined, [[3, 36], [41, 50]]);
+            }, _callee3, undefined, [[3, 36], [41, 54]]);
         }));
 
         return function (_x5, _x6) {
