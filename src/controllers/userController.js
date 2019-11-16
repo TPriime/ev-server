@@ -2,7 +2,7 @@ import { Router } from 'express';
 import User from '../models/userModel';
 import { validateToken } from '../middleware/accessToken';
 let uuid4 = require('uuid4');
-require('babel-polyfill');//////////////
+// require('babel-polyfill');//////////////
 
 export default ({ config, db}) => {
     let api = Router();
@@ -128,16 +128,14 @@ export default ({ config, db}) => {
             }
         }else{
             try {
-                let user = await User.findOne({
-                    $or: [
-                        {cardID: id},
-                        {_id: id}
-                    ]
-                },{
-                    __v: 0
-                });
+                let user = await User.findOne({cardID: id},{__v: 0});
 
-                if (!user) return res.status(401).json({message: "No user found"});
+                if (!user) {
+                    user = await User.findOne({_id: id},{__v: 0});
+                    if (!user) {
+                        return res.status(401).json({message: "No user found"});
+                    }
+                }
 
                 res.json(user);
             } catch (error) {
