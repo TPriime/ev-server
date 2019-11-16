@@ -65,6 +65,8 @@ function handle_connection(ws) {
 }
 
 function get_send_voter_details(ws, voter_id) {
+console.log("///////////////////user id///////////////////////////")
+console.log("/evoting_api/v1/users/" + voter_id)
 
     http.get({
         hostname: 'localhost',
@@ -77,6 +79,9 @@ function get_send_voter_details(ws, voter_id) {
         });
         res.on('end', function () {
             data = JSON.parse(data);
+            if (Object.entries(obj).length === 0) {
+                return ws_send(ws, 'user_data_error', 'DIE');
+            }
 
             var user_data = {};
             user_data.id = data._id, user_data.name = data.firstName, user_data.surname = data.lastName, user_data.othername = data.otherNames, user_data.gender = data.gender, user_data.state = data.state, user_data.town = data.town, user_data.lga = data.lga, user_data.fingerprint = data.fingerprint;
