@@ -40,6 +40,10 @@ var _votingController = require('../controllers/votingController');
 
 var _votingController2 = _interopRequireDefault(_votingController);
 
+var _voterController = require('../controllers/voterController');
+
+var _voterController2 = _interopRequireDefault(_voterController);
+
 var _userElection = require('../controllers/userElection');
 
 var _userElection2 = _interopRequireDefault(_userElection);
@@ -62,6 +66,7 @@ var router = (0, _express2.default)();
     router.use('/elections', (0, _electionController2.default)({ config: _config2.default, db: db }));
     router.use('/electiongroup', (0, _electionGroupController2.default)({ config: _config2.default, db: db }));
     router.use('/userelection', (0, _userElection2.default)({ config: _config2.default, db: db }));
+    router.use('/voter', (0, _voterController2.default)({ config: _config2.default, db: db }));
     router.use('/votes', (0, _votingController2.default)({ config: _config2.default, db: db }));
     router.use('/devices', (0, _deviceController2.default)({ config: _config2.default, db: db }));
 });

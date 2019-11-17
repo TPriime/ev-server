@@ -2,7 +2,7 @@ import { Router } from 'express';
 import User from '../models/userModel';
 import { validateToken } from '../middleware/accessToken';
 let uuid4 = require('uuid4');
-// require('babel-polyfill');////////////// for build purpose
+require('babel-polyfill');////////////// for build purpose
 
 export default ({ config, db}) => {
     let api = Router();
@@ -128,13 +128,10 @@ export default ({ config, db}) => {
             }
         }else{
             try {
-                let user = await User.findOne({cardID: id},{__v: 0});
+                let user = await User.findOne({_id: id},{__v: 0});
 
                 if (!user) {
-                    user = await User.findOne({_id: id},{__v: 0});
-                    if (!user) {
-                        return res.status(401).json({message: "No user found"});
-                    }
+                    return res.status(401).json({message: "No user found"});
                 }
 
                 res.json(user);
@@ -148,7 +145,6 @@ export default ({ config, db}) => {
     api.put('/update/:id', async (req, res) => {
         validateToken(req, res);
         const id = req.params.id;
-        console.log(req.body);
         const {firstName,lastName,otherNames,dateOfBirth,gender,state,lga,maritalStatus,occupation} = req.body;
 
         try {

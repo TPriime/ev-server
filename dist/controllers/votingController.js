@@ -46,47 +46,49 @@ exports.default = function (_ref) {
                             return _context.abrupt('return', res.status(400).json({ message: 'Voter has Voted Before!!!' }));
 
                         case 6:
+                            ;
+
                             data = {
                                 voter: req.body.voter,
                                 votes: req.body.votes,
                                 device: req.body.device,
                                 voteTime: new Date(req.body.voteTime)
                             };
-                            _context.next = 9;
+                            _context.next = 10;
                             return _votingModel2.default.create(data);
 
-                        case 9:
+                        case 10:
                             votes = _context.sent;
 
                             if (!votes) {
-                                _context.next = 14;
+                                _context.next = 15;
                                 break;
                             }
 
                             res.json({
                                 message: "Vote Counted Successfully"
                             });
-                            _context.next = 15;
+                            _context.next = 16;
                             break;
-
-                        case 14:
-                            return _context.abrupt('return', res.status(401).json({ message: 'Voting not Successful!' }));
 
                         case 15:
-                            _context.next = 20;
+                            return _context.abrupt('return', res.status(401).json({ message: 'Voting not Successful!' }));
+
+                        case 16:
+                            _context.next = 21;
                             break;
 
-                        case 17:
-                            _context.prev = 17;
+                        case 18:
+                            _context.prev = 18;
                             _context.t0 = _context['catch'](0);
                             return _context.abrupt('return', res.status(422).json({ error: _context.t0 }));
 
-                        case 20:
+                        case 21:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[0, 17]]);
+            }, _callee, undefined, [[0, 18]]);
         }));
 
         return function (_x, _x2) {

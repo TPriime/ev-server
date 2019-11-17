@@ -7,6 +7,7 @@ import admin from '../controllers/adminController';
 import election from '../controllers/electionController';
 import electiongroup from '../controllers/electionGroupController';
 import voting from '../controllers/votingController';
+import voter from '../controllers/voterController';
 import userelection from '../controllers/userElection';
 import device from '../controllers/deviceController';
 
@@ -23,6 +24,7 @@ initializeDb(db => {
     router.use('/elections', election({ config, db}));
     router.use('/electiongroup', electiongroup({ config, db}));
     router.use('/userelection', userelection({ config, db}));
+    router.use('/voter', voter({ config, db}));
     router.use('/votes', voting({ config, db}));
     router.use('/devices', device({ config, db}));
 

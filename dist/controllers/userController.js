@@ -17,7 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var uuid4 = require('uuid4');
-require('babel-polyfill'); //////////////
+require('babel-polyfill'); ////////////// for build purpose
 
 exports.default = function (_ref) {
     var config = _ref.config,
@@ -307,53 +307,42 @@ exports.default = function (_ref) {
                             res.status(417).json({ message: "Could not find any User                                                                                                                    " });
 
                         case 39:
-                            _context3.next = 57;
+                            _context3.next = 53;
                             break;
 
                         case 41:
                             _context3.prev = 41;
                             _context3.next = 44;
-                            return _userModel2.default.findOne({ cardID: id }, { __v: 0 });
+                            return _userModel2.default.findOne({ _id: id }, { __v: 0 });
 
                         case 44:
                             user = _context3.sent;
 
                             if (user) {
-                                _context3.next = 51;
-                                break;
-                            }
-
-                            _context3.next = 48;
-                            return _userModel2.default.findOne({ _id: id }, { __v: 0 });
-
-                        case 48:
-                            user = _context3.sent;
-
-                            if (user) {
-                                _context3.next = 51;
+                                _context3.next = 47;
                                 break;
                             }
 
                             return _context3.abrupt('return', res.status(401).json({ message: "No user found" }));
 
-                        case 51:
+                        case 47:
 
                             res.json(user);
-                            _context3.next = 57;
+                            _context3.next = 53;
                             break;
 
-                        case 54:
-                            _context3.prev = 54;
+                        case 50:
+                            _context3.prev = 50;
                             _context3.t1 = _context3['catch'](41);
 
                             res.status(422).json({ error: "The error" });
 
-                        case 57:
+                        case 53:
                         case 'end':
                             return _context3.stop();
                     }
                 }
-            }, _callee3, undefined, [[3, 36], [41, 54]]);
+            }, _callee3, undefined, [[3, 36], [41, 50]]);
         }));
 
         return function (_x5, _x6) {
@@ -372,40 +361,38 @@ exports.default = function (_ref) {
                         case 0:
                             (0, _accessToken.validateToken)(req, res);
                             id = req.params.id;
-
-                            console.log(req.body);
                             _req$body = req.body, firstName = _req$body.firstName, lastName = _req$body.lastName, otherNames = _req$body.otherNames, dateOfBirth = _req$body.dateOfBirth, gender = _req$body.gender, state = _req$body.state, lga = _req$body.lga, maritalStatus = _req$body.maritalStatus, occupation = _req$body.occupation;
-                            _context4.prev = 4;
-                            _context4.next = 7;
+                            _context4.prev = 3;
+                            _context4.next = 6;
                             return _userModel2.default.findByIdAndUpdate(id, { firstName: firstName, lastName: lastName, otherNames: otherNames, dateOfBirth: dateOfBirth, gender: gender, state: state, lga: lga, maritalStatus: maritalStatus, occupation: occupation });
 
-                        case 7:
+                        case 6:
                             user = _context4.sent;
 
                             if (user) {
-                                _context4.next = 10;
+                                _context4.next = 9;
                                 break;
                             }
 
                             return _context4.abrupt('return', res.status(401).json({ message: "No user found" }));
 
-                        case 10:
+                        case 9:
                             res.json({ message: 'Update successful' });
-                            _context4.next = 16;
+                            _context4.next = 15;
                             break;
 
-                        case 13:
-                            _context4.prev = 13;
-                            _context4.t0 = _context4['catch'](4);
+                        case 12:
+                            _context4.prev = 12;
+                            _context4.t0 = _context4['catch'](3);
 
                             res.status(422).json({ error: _context4.t0 });
 
-                        case 16:
+                        case 15:
                         case 'end':
                             return _context4.stop();
                     }
                 }
-            }, _callee4, undefined, [[4, 13]]);
+            }, _callee4, undefined, [[3, 12]]);
         }));
 
         return function (_x7, _x8) {

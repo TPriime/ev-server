@@ -65,13 +65,10 @@ function handle_connection(ws) {
 }
 
 function get_send_voter_details(ws, voter_id) {
-console.log("///////////////////user id///////////////////////////")
-console.log("/evoting_api/v1/users/" + voter_id)
-
     http.get({
         hostname: 'localhost',
         port: port,
-        path: "/evoting_api/v1/users/" + voter_id
+        path: '/evoting_api/v1/voter/' + voter_id
     }, function (res) {
         var data = '';
         res.on('data', function (chunk) {
@@ -79,8 +76,10 @@ console.log("/evoting_api/v1/users/" + voter_id)
         });
         res.on('end', function () {
             data = JSON.parse(data);
-            if (Object.entries(obj).length === 0) {
-                return ws_send(ws, 'user_data_error', 'DIE');
+            if (Object.entries(data).length === 0) {
+                return ws_send(ws, 'multiple_vote', {});
+            } else if (data.message == 'No user found') {
+                return ws_send(ws, 'user_data_error', {});
             }
 
             var user_data = {};
@@ -103,6 +102,8 @@ function fetch_send_election_data(ws, user_data) {
         _user_data$split2 = _slicedToArray(_user_data$split, 2),
         user_id = _user_data$split2[0],
         user_lga = _user_data$split2[1];
+
+    user_lga = user_lga.replace(" ", "_");
 
     var req_msg = {
         hostname: "localhost",

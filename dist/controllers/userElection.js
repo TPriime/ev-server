@@ -33,7 +33,7 @@ exports.default = function (_ref) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
-                            user_lga = req.params.lga;
+                            user_lga = req.params.lga.replace("_", " ");
                             _context.prev = 1;
                             _context.next = 4;
                             return _lgaModel2.default.findOne({ LGA: user_lga });

@@ -8,7 +8,7 @@ export default ({ config, db}) => {
 
     // '/evoting_api/v1/userelection/:lga' Endpoint to get voters
     api.get('/:lga', async (req, res) => {
-        const user_lga = req.params.lga;
+        const user_lga = req.params.lga.replace("_", " ");
         try {
 
             // Get User LGA Details
@@ -24,7 +24,7 @@ export default ({ config, db}) => {
                 ]
             });
             if (elections.length < 1) return res.status(401).json({message: "Elections not found!"});
-            
+
             res.json(elections);
         } catch (error) {
             console.log(error);
