@@ -1,27 +1,44 @@
 "use strict";
 
 module.exports.election_data = [{
-    "title": "Presidential",
-    "parties": ["PDP", "APC"],
-    "criteria": {
-        "state": "Anambra"
-    }
+    "electionAvailable": false,
+    "_id": "5dd109c8d39e6b004e8135e3",
+    "electionCode": "FC/005/AB",
+    "electionParties": [{
+        "name": "ABP"
+    }, {
+        "name": "LM"
+    }, {
+        "name": "ANRP"
+    }],
+    "electionName": "House of Rep",
+    "electionDate": "2020-08-07T23:00:00.000Z"
 }, {
-    "title": "Senatorial",
-    "parties": ["PDP", "APC", "APGA", "APA", "ZLP"],
-    "criteria": {}
+    "electionAvailable": false,
+    "_id": "5dd109c8d39e6b004e813571",
+    "electionCode": "PD/111/NIG",
+    "electionParties": [{
+        "name": "AAP"
+    }, {
+        "name": "PPC"
+    }, {
+        "name": "LPN"
+    }],
+    "electionName": "Presidential",
+    "electionDate": "2020-08-07T23:00:00.000Z"
 }, {
-    "title": "Governorship",
-    "parties": ["YDP", "AUN", "MDP", "ACPN", "ADC", "BNPP", "UPC", "ID", "PDP"],
-    "criteria": {
-        "state": "Anambra"
-    }
-}, {
-    "title": "other",
-    "parties": ["FRESH", "PDC", "BNPP", "APGA", "COP", "CAP"],
-    "criteria": {
-        "age": "18,29"
-    }
+    "electionAvailable": false,
+    "_id": "5dd109c8d39e6b004e813572",
+    "electionCode": "SD/001/AB",
+    "electionParties": [{
+        "name": "ACPN"
+    }, {
+        "name": "DA"
+    }, {
+        "name": "APM"
+    }],
+    "electionName": "Senatorial",
+    "electionDate": "2020-08-07T23:00:00.000Z"
 }];
 
 module.exports.user_data = {

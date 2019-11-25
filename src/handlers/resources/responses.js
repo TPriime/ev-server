@@ -1,47 +1,65 @@
 module.exports.election_data = [
     {
-        "title": "Presidential",
-        "parties": [
-            "PDP", "APC"
+        "electionAvailable": false,
+        "_id": "5dd109c8d39e6b004e8135e3",
+        "electionCode": "FC/005/AB",
+        "electionParties": [
+            {
+                "name": "ABP"
+            },
+            {
+                "name": "LM"
+            },
+            {
+                "name": "ANRP"
+            }
         ],
-        "criteria": {
-            "state": "Anambra"
-        }
+        "electionName": "House of Rep",
+        "electionDate": "2020-08-07T23:00:00.000Z"
     },
     {
-        "title": "Senatorial",
-        "parties": [
-            "PDP", "APC", "APGA", "APA", "ZLP"
+        "electionAvailable": false,
+        "_id": "5dd109c8d39e6b004e813571",
+        "electionCode": "PD/111/NIG",
+        "electionParties": [
+            {
+                "name": "AAP"
+            },
+            {
+                "name": "PPC"
+            },
+            {
+                "name": "LPN"
+            }
         ],
-        "criteria": {}
+        "electionName": "Presidential",
+        "electionDate": "2020-08-07T23:00:00.000Z"
     },
     {
-        "title": "Governorship",
-        "parties": [
-            "YDP", "AUN", "MDP", "ACPN", "ADC", "BNPP", "UPC", "ID", "PDP"
+        "electionAvailable": false,
+        "_id": "5dd109c8d39e6b004e813572",
+        "electionCode": "SD/001/AB",
+        "electionParties": [
+            {
+                "name": "ACPN"
+            },
+            {
+                "name": "DA"
+            },
+            {
+                "name": "APM"
+            }
         ],
-        "criteria": {
-            "state": "Anambra"
-        }
-    },
-    {
-        "title": "other",
-        "parties": [
-            "FRESH", "PDC", "BNPP", "APGA", "COP", "CAP"
-        ],
-        "criteria": {
-            "age": "18,29"
-        }
+        "electionName": "Senatorial",
+        "electionDate": "2020-08-07T23:00:00.000Z"
     }
 ]
-
-
 
 module.exports.user_data = {
     "id": "14224",
     "name": "Ben",
     "surname": "Okongwu",
-    "othername": "Jide",    
+    "othername": "Jide",
     "gender": "Male",
     "state": "Anambra",
     "town": "Awka",
@@ -51,4 +69,3 @@ module.exports.user_data = {
         "data": [0,1,23,232,45,3,5,5,6,34,67,3,0,0,6,1,2,12,3,68,9,90,45,26,29,100,220,105,0,0,10,34]
     }
 }
-

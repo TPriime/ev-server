@@ -76,6 +76,7 @@ function get_send_voter_details(ws, voter_id) {
         });
         res.on('end', function () {
             data = JSON.parse(data);
+            // data = response.user_data; //////////////////////////emulated test
             if (Object.entries(data).length === 0) {
                 return ws_send(ws, 'multiple_vote', {});
             } else if (data.message == 'No user found') {
@@ -122,6 +123,7 @@ function fetch_send_election_data(ws, user_data) {
         });
         res.on('end', function () {
             var fetched_data = JSON.parse(data);
+            // let fetched_data = response.election_data; ///////////////////
             var constructed_data = [];
 
             for (var election in fetched_data) {

@@ -80,6 +80,7 @@ function get_send_voter_details(ws, voter_id){
         res.on('data', chunk=>data+=chunk)
         res.on('end', ()=>{
             data = JSON.parse(data);
+            // data = response.user_data; //////////////////////////emulated test
             if (Object.entries(data).length === 0) {
                 return ws_send(ws, 'multiple_vote', {});
             }else if (data.message == 'No user found') {
@@ -131,6 +132,7 @@ function fetch_send_election_data(ws, user_data){
         res.on('data', chunk=>data+=chunk)
         res.on('end', ()=>{
             let fetched_data = JSON.parse(data)
+            // let fetched_data = response.election_data; ///////////////////
             let constructed_data = [];
 
             for(let election in fetched_data){
